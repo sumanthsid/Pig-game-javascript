@@ -8,7 +8,7 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
-var scores, roundScore, activePlayer, gamePlaying,check
+var scores, roundScore, activePlayer, gamePlaying,check, finalScore
 
 init()
 
@@ -29,15 +29,19 @@ document.querySelector('.btn-roll').addEventListener('click',function(){
     // create random number
     var dice=Math.floor(Math.random()*6)+1
     //var dice=6
-    
+    var dice2=Math.floor(Math.random()*6)+1
     //display result
     var diceDOM=document.querySelector('.dice')
+    var dice2DOM=document.querySelector('.dice2')
     diceDOM.style.display='block'
     diceDOM.src='dice-'+dice+'.png'
-
+    
+    //second dice
+    dice2DOM.style.display='block'
+    dice2DOM.src='dice-'+dice2+'.png'
     // update roundScore
-    if (dice>1){
-        if (dice===6){
+    if (dice>1 && dice2>1){
+        if (dice===6 || dice2===6){
             check+=1
             if (check===3){
                 scores[activePlayer]=0
@@ -51,6 +55,7 @@ document.querySelector('.btn-roll').addEventListener('click',function(){
             check=0
         }
         roundScore+=dice
+        roundScore+=dice2
         document.getElementById('current-'+activePlayer).textContent=roundScore
 
     }
@@ -62,15 +67,20 @@ document.querySelector('.btn-roll').addEventListener('click',function(){
     }}
 
 })
-
 document.querySelector('.btn-hold').addEventListener('click',function(){
     if (gamePlaying){
         scores[activePlayer]+=roundScore
         document.querySelector('#score-'+activePlayer).textContent=scores[activePlayer]
         check=0
-    if (scores[activePlayer]>=100){
+        finalScore=document.getElementsByClassName('final-score')[0].value
+        if (finalScore)
+            var endScore=finalScore
+        else
+            endScore=finalScore
+    if (scores[activePlayer]>=endScore){
         document.querySelector('#name-'+activePlayer).textContent='WINNER!'
         document.querySelector('.dice').style.display='none'
+        document.querySelector('.dice2').style.display='none'
         document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner')
         document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active')
         gamePlaying=false
@@ -89,8 +99,9 @@ function init(){
     roundScore=0
     gamePlaying=true
     check=0
+    finalScore=100
     document.querySelector('.dice').style.display='none'
-
+    document.querySelector('.dice2').style.display='none'
     document.getElementById('score-0').textContent=0
     document.getElementById('score-1').textContent=0
     document.getElementById('current-0').textContent=0
