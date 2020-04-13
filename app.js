@@ -76,7 +76,7 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
         if (finalScore)
             var endScore=finalScore
         else
-            endScore=finalScore
+            endScore=100
     if (scores[activePlayer]>=endScore){
         document.querySelector('#name-'+activePlayer).textContent='WINNER!'
         document.querySelector('.dice').style.display='none'
