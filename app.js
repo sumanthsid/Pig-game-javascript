@@ -8,7 +8,7 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
-var scores, roundScore, activePlayer, gamePlaying
+var scores, roundScore, activePlayer, gamePlaying,check
 
 init()
 
@@ -22,10 +22,13 @@ function nextPlayer(){
         document.querySelector('.player-0-panel').classList.toggle('active')
         document.querySelector('.player-1-panel').classList.toggle('active')
 }
+
+
 document.querySelector('.btn-roll').addEventListener('click',function(){
     if (gamePlaying){    
     // create random number
     var dice=Math.floor(Math.random()*6)+1
+    //var dice=6
     
     //display result
     var diceDOM=document.querySelector('.dice')
@@ -34,6 +37,19 @@ document.querySelector('.btn-roll').addEventListener('click',function(){
 
     // update roundScore
     if (dice>1){
+        if (dice===6){
+            check+=1
+            if (check===3){
+                scores[activePlayer]=0
+                document.getElementById('score-'+activePlayer).textContent=scores[activePlayer]
+                nextPlayer()
+                check=0
+                return
+            }
+        }
+        else {
+            check=0
+        }
         roundScore+=dice
         document.getElementById('current-'+activePlayer).textContent=roundScore
 
@@ -50,8 +66,8 @@ document.querySelector('.btn-roll').addEventListener('click',function(){
 document.querySelector('.btn-hold').addEventListener('click',function(){
     if (gamePlaying){
         scores[activePlayer]+=roundScore
-    document.querySelector('#score-'+activePlayer).textContent=scores[activePlayer]
-
+        document.querySelector('#score-'+activePlayer).textContent=scores[activePlayer]
+        check=0
     if (scores[activePlayer]>=100){
         document.querySelector('#name-'+activePlayer).textContent='WINNER!'
         document.querySelector('.dice').style.display='none'
@@ -72,6 +88,7 @@ function init(){
     activePlayer=0
     roundScore=0
     gamePlaying=true
+    check=0
     document.querySelector('.dice').style.display='none'
 
     document.getElementById('score-0').textContent=0
